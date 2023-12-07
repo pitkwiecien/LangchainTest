@@ -2,10 +2,8 @@ import config
 from git_manager import GitManager
 from file_manager import FileManager
 from pinecone_manager import PineconeManager
-from langchain.chains import RetrievalQA
-from langchain.llms import OpenAI
-from langchain.callbacks import StdOutCallbackHandler
-
+from openai_asker import OpenaiAsker
+from mongo_manager import MongoManager
 
 file_contents = GitManager.get_files_content(config.PROJECT_REPO_LOCATION)
 split_contents = FileManager.split_content(file_contents)
@@ -16,14 +14,10 @@ pinecone_mgr.index_content(split_contents)
 
 index = pinecone_mgr.get_index()
 
-query = "Add a parameter ram to the class Computer and return the whole class with the changes"
-qa = RetrievalQA.from_chain_type(
-    llm=OpenAI(),
-    chain_type="stuff",
-    retriever=index.as_retriever(),
-    callbacks=[StdOutCallbackHandler()],
-    verbose=True
-)
+mongo_mgr = MongoManager("test-session")
 
-result = qa.run(query)
-print(result)
+ai_asker = OpenaiAsker(index)
+result = ai_asker.ask("Add a parameter ram to the class Computer and return the whole class with the changes")
+OpenaiAsker.print_answer(result)
+result = ai_asker.ask("Add a parameter psu also to the class Computer considering the previous changes")
+OpenaiAsker.print_answer(result)
