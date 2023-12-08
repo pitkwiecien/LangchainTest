@@ -20,31 +20,6 @@ You will be given tasks to perform on given python code. Answer them by performi
 of the code including the whole changed object. Return the objects that you think should be changed in the updated version. If one or more of these objects 
 had been changed before and appear in Context, perform any changes considering the previous changes.
 
-EXAMPLE:
-there is a given class in Python:
-class A:
-    def __init__(self, a):
-        self.a = a
-
-HumanMessage: 
-add a parameter b to class A
-
-AIMessage:
-class A:
-    def __init__(self, a, b):
-        self.a = a
-        self.b = b
-
-HumanMessage:
-add a parameter c to class A
-
-AIMessage:
-class A:
-    def __init__(self, a, b, c):
-        self.a = a
-        self.b = b
-        self.c = c
-
 Context: 
 {context}
 
