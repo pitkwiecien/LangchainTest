@@ -17,9 +17,11 @@ class PineconeManager:
         pinecone.init(environment='gcp-starter')
         try:
             _ = pinecone.describe_index(index_name)
+            
         except NotFoundException:
             try:
                 pinecone.create_index(index_name, 1536)
+                
             except ApiException:
                 indices = pinecone.list_indexes()
                 for index in indices:
@@ -33,6 +35,8 @@ class PineconeManager:
 
     def index_content(self, content):
         embeddings_model = OpenAIEmbeddings()
+        index = pinecone.Index(self.index_name)
+        index.delete(delete_all=True)
         Pinecone.from_documents(
             FileManager.content_for_pinecone(content),
             embeddings_model,
